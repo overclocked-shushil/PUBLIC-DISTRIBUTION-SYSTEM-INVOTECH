@@ -1,0 +1,759 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"/&gt;</p>
+<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;</p>
+<p class="p1">&lt;title&gt;SmartRation — Inventory Management System&lt;/title&gt;</p>
+<p class="p1">&lt;link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&amp;display=swap" rel="stylesheet"/&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--bg: #0a0f1e;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--surface: #111827;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--card: #1a2236;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--border: rgba(255,255,255,0.08);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--admin: #c026d3;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--admin-dim: rgba(192,38,211,0.15);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--dist: #2563eb;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--dist-dim: rgba(37,99,235,0.15);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--cust: #059669;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--cust-dim: rgba(5,150,105,0.15);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--pub: #d97706;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--pub-dim: rgba(217,119,6,0.15);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--accent: #38bdf8;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--text: #f0f4ff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--muted: #6b7a99;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--success: #10b981;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>--white: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>* { margin:0; padding:0; box-sizing:border-box; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }</p>
+<p class="p2"><span class="Apple-converted-space">  </span></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== NOISE OVERLAY ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== LAYOUT ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.screen { display:none; min-height:100vh; position:relative; z-index:1; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.screen.active { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; animation:fadeIn .35s ease; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== NAV BAR ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:16px 32px; background:rgba(10,15,30,0.85); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.5px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.nav-logo span { color:var(--accent); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.nav-back { background:transparent; border:1px solid var(--border); color:var(--muted); padding:8px 16px; border-radius:8px; cursor:pointer; font-size:13px; font-family:inherit; transition:all .2s; display:none; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.nav-back:hover { border-color:var(--accent); color:var(--accent); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.nav-back.visible { display:block; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== HERO BADGE ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.badge { display:inline-flex; align-items:center; gap:6px; background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.3); color:var(--accent); padding:6px 14px; border-radius:100px; font-size:12px; font-weight:500; letter-spacing:.5px; text-transform:uppercase; margin-bottom:20px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.badge-dot { width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== HEADINGS ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(36px,5vw,64px); line-height:1.05; letter-spacing:-2px; margin-bottom:16px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h1 em { font-style:normal; color:var(--accent); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:clamp(24px,3vw,36px); letter-spacing:-1px; margin-bottom:8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.subtitle { color:var(--muted); font-size:16px; line-height:1.6; max-width:480px; margin-bottom:40px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== LOGIN CARDS ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.cards-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; width:100%; max-width:600px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@media(max-width:500px){ .cards-grid{grid-template-columns:1fr;} }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:28px 24px; cursor:pointer; transition:all .25s; position:relative; overflow:hidden; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card::before { content:''; position:absolute; inset:0; opacity:0; transition:opacity .25s; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card.admin::before { background:var(--admin-dim); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card.dist::before<span class="Apple-converted-space">  </span>{ background:var(--dist-dim); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card.cust::before<span class="Apple-converted-space">  </span>{ background:var(--cust-dim); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card.pub::before <span class="Apple-converted-space">  </span>{ background:var(--pub-dim); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card:hover { transform:translateY(-4px); border-color:rgba(255,255,255,0.15); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card:hover::before { opacity:1; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card.admin:hover { border-color:var(--admin); box-shadow:0 8px 32px rgba(192,38,211,0.2); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card.dist:hover<span class="Apple-converted-space">  </span>{ border-color:var(--dist);<span class="Apple-converted-space">  </span>box-shadow:0 8px 32px rgba(37,99,235,0.2); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card.cust:hover<span class="Apple-converted-space">  </span>{ border-color:var(--cust);<span class="Apple-converted-space">  </span>box-shadow:0 8px 32px rgba(5,150,105,0.2); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card.pub:hover <span class="Apple-converted-space">  </span>{ border-color:var(--pub); <span class="Apple-converted-space">  </span>box-shadow:0 8px 32px rgba(217,119,6,0.2); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-icon { width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.admin .card-icon { background:var(--admin-dim); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dist<span class="Apple-converted-space">  </span>.card-icon { background:var(--dist-dim); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.cust<span class="Apple-converted-space">  </span>.card-icon { background:var(--cust-dim); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pub <span class="Apple-converted-space">  </span>.card-icon { background:var(--pub-dim); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-title { font-family:'Syne',sans-serif; font-weight:700; font-size:17px; margin-bottom:4px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-desc<span class="Apple-converted-space">  </span>{ font-size:13px; color:var(--muted); line-height:1.5; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.card-arrow { position:absolute; top:24px; right:24px; color:var(--muted); font-size:18px; transition:transform .2s, color .2s; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.login-card:hover .card-arrow { transform:translate(3px,-3px); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.admin:hover .card-arrow { color:var(--admin); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dist:hover<span class="Apple-converted-space">  </span>.card-arrow { color:var(--dist); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.cust:hover<span class="Apple-converted-space">  </span>.card-arrow { color:var(--cust); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.pub:hover <span class="Apple-converted-space">  </span>.card-arrow { color:var(--pub); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== FORM CONTAINER ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.form-wrap { background:var(--card); border:1px solid var(--border); border-radius:24px; padding:40px; width:100%; max-width:440px; margin-top:16px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.form-title { font-family:'Syne',sans-serif; font-weight:700; font-size:24px; margin-bottom:4px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.form-sub { color:var(--muted); font-size:14px; margin-bottom:28px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.field { margin-bottom:18px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.field label { display:block; font-size:13px; color:var(--muted); margin-bottom:6px; letter-spacing:.3px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.field input, .field select, .field textarea { width:100%; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:12px 16px; border-radius:12px; font-size:15px; font-family:inherit; transition:border-color .2s, box-shadow .2s; outline:none; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.field input:focus, .field select:focus, .field textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(56,189,248,0.1); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.field select { cursor:pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.field textarea { resize:vertical; min-height:80px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* OTP row */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.otp-row { display:flex; gap:10px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.otp-row input { flex:1; text-align:center; font-size:22px; font-weight:700; letter-spacing:4px; padding:14px 8px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== BUTTONS ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 28px; border-radius:12px; font-size:15px; font-weight:600; font-family:inherit; cursor:pointer; border:none; transition:all .2s; width:100%; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-admin { background:var(--admin); color:#fff; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-admin:hover { background:#a21caf; box-shadow:0 4px 20px rgba(192,38,211,0.4); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-dist<span class="Apple-converted-space">  </span>{ background:var(--dist); color:#fff; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-dist:hover<span class="Apple-converted-space">  </span>{ background:#1d4ed8; box-shadow:0 4px 20px rgba(37,99,235,0.4); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-cust<span class="Apple-converted-space">  </span>{ background:var(--cust); color:#fff; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-cust:hover<span class="Apple-converted-space">  </span>{ background:#047857; box-shadow:0 4px 20px rgba(5,150,105,0.4); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-pub <span class="Apple-converted-space">  </span>{ background:var(--pub); color:#fff; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-pub:hover <span class="Apple-converted-space">  </span>{ background:#b45309; box-shadow:0 4px 20px rgba(217,119,6,0.4); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-ghost { background:transparent; border:1px solid var(--border); color:var(--muted); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-ghost:hover { border-color:var(--accent); color:var(--accent); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-accent{ background:var(--accent); color:#0a0f1e; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.btn-accent:hover{ filter:brightness(1.1); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== STEPPER ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stepper { display:flex; align-items:center; gap:0; margin-bottom:32px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.step { display:flex; align-items:center; gap:8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.step-num { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; border:2px solid var(--border); color:var(--muted); transition:all .3s; flex-shrink:0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.step-num.active { border-color:var(--accent); color:var(--accent); background:rgba(56,189,248,0.1); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.step-num.done <span class="Apple-converted-space">  </span>{ border-color:var(--success); background:var(--success); color:#fff; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.step-label { font-size:12px; color:var(--muted); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.step-label.active { color:var(--text); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.step-line { flex:1; height:1px; background:var(--border); margin:0 8px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== DASHBOARD ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dash-wrap { width:100%; max-width:900px; padding-top:80px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dash-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; flex-wrap:wrap; gap:16px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.dash-header h2 { margin:0; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.user-chip { display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--border); border-radius:100px; padding:8px 16px 8px 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.user-avatar { width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.user-name { font-size:14px; font-weight:500; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:28px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stat-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stat-label { font-size:12px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stat-val { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.stat-sub { font-size:12px; color:var(--muted); margin-top:4px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>.table-wrap { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.table-head { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.table-head h3 { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>table { width:100%; border-collapse:collapse; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>th,td { padding:12px 20px; text-align:left; font-size:14px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>th { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.5px; border-bottom:1px solid var(--border); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>tr:not(:last-child) td { border-bottom:1px solid var(--border); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>tr:hover td { background:rgba(255,255,255,0.02); }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chip { display:inline-flex; align-items:center; padding:3px 10px; border-radius:100px; font-size:12px; font-weight:500; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chip-green { background:rgba(16,185,129,0.15); color:#10b981; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chip-yellow { background:rgba(245,158,11,0.15); color:#f59e0b; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.chip-red { background:rgba(239,68,68,0.15); color:#ef4444; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Success screen */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.success-icon { width:72px;height:72px;border-radius:50%;background:rgba(16,185,129,0.15);border:2px solid var(--success);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* OTP timer */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.otp-timer { font-size:13px; color:var(--muted); text-align:center; margin-top:12px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.otp-timer span { color:var(--accent); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* Progress bar */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.progress { height:3px; background:var(--border); border-radius:2px; margin-bottom:28px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>.progress-bar { height:100%; border-radius:2px; background:var(--accent); transition:width .4s ease; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>/* ===== MOBILE ===== */</p>
+<p class="p1"><span class="Apple-converted-space">  </span>@media(max-width:600px){ .form-wrap{padding:24px 20px;} nav{padding:12px 20px;} }</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- NAV --&gt;</p>
+<p class="p1">&lt;nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="nav-logo"&gt;Smart&lt;span&gt;Ration&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;button class="nav-back" id="navBack" onclick="goHome()"&gt;← Back to Home&lt;/button&gt;</p>
+<p class="p1">&lt;/nav&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN 0: HOME / LOGIN PAGE<span class="Apple-converted-space">                  </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen active" id="screen-home"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;max-width:640px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge"&gt;&lt;span class="badge-dot"&gt;&lt;/span&gt;College Project — Smart Inventory&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Smart&lt;em&gt;Ration&lt;/em&gt;&lt;br/&gt;Management&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle"&gt;A unified platform for managing ration distribution with OTP-verified access for Admins, Distributors, and Customers.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="cards-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="login-card admin" onclick="navigate('admin-login')"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-icon"&gt;🛡️&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-title"&gt;Admin&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-desc"&gt;Manage distributors, oversee records &amp; system&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-arrow"&gt;↗&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="login-card dist" onclick="navigate('dist-login')"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-icon"&gt;📦&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-title"&gt;Distributor&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-desc"&gt;Record ration collection &amp; manage customers&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-arrow"&gt;↗&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="login-card cust" onclick="navigate('cust-login')"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-icon"&gt;👨‍👩‍👧&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-title"&gt;Customer&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-desc"&gt;View family details &amp; ration history&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-arrow"&gt;↗&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="login-card pub" onclick="navigate('pub-complaint')"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-icon"&gt;📢&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-title"&gt;Public Complaint&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-desc"&gt;File a complaint without login&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="card-arrow"&gt;↗&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: ADMIN LOGIN<span class="Apple-converted-space">                          </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-admin-login"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--admin-dim);border-color:rgba(192,38,211,0.4);color:var(--admin);"&gt;🛡️ Admin Portal&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Admin Login&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto"&gt;Enter your credentials to access the admin panel&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stepper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num active"&gt;1&lt;/div&gt;&lt;div class="step-label active"&gt;Credentials&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num" id="ast2"&gt;2&lt;/div&gt;&lt;div class="step-label" id="asl2"&gt;OTP Verify&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num" id="ast3"&gt;3&lt;/div&gt;&lt;div class="step-label" id="asl3"&gt;Dashboard&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Admin ID / Email&lt;/label&gt;&lt;input type="text" placeholder="admin@smartration.gov.in" id="adminId"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Password&lt;/label&gt;&lt;input type="password" placeholder="••••••••" id="adminPass"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Registered Phone Number&lt;/label&gt;&lt;input type="tel" placeholder="+91 98765 43210" id="adminPhone"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-admin" onclick="sendOTP('admin')"&gt;Send OTP →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: ADMIN OTP<span class="Apple-converted-space">                            </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-admin-otp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--admin-dim);border-color:rgba(192,38,211,0.4);color:var(--admin);"&gt;📱 OTP Verification&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Verify Your Phone&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto" id="adminOtpMsg"&gt;OTP sent to your registered number&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stepper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num done"&gt;✓&lt;/div&gt;&lt;div class="step-label"&gt;Credentials&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num active"&gt;2&lt;/div&gt;&lt;div class="step-label active"&gt;OTP Verify&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;3&lt;/div&gt;&lt;div class="step-label"&gt;Dashboard&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Enter 6-digit OTP&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="otp-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="ao1" oninput="otpMove(this,'ao2')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="ao2" oninput="otpMove(this,'ao3')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="ao3" oninput="otpMove(this,'ao4')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="ao4" oninput="otpMove(this,'ao5')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="ao5" oninput="otpMove(this,'ao6')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="ao6" oninput="otpMove(this,null)"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="otp-timer"&gt;Demo OTP: &lt;span&gt;1 2 3 4 5 6&lt;/span&gt; — Expires in &lt;span id="adminTimer"&gt;2:00&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-admin" onclick="verifyOTP('admin')"&gt;Verify &amp; Continue →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br/&gt;&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-ghost" onclick="navigate('admin-login')"&gt;← Change Number&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: ADMIN DASHBOARD<span class="Apple-converted-space">                      </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-admin-dashboard"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="dash-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="dash-header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="badge" style="background:var(--admin-dim);border-color:rgba(192,38,211,0.4);color:var(--admin);margin-bottom:8px;"&gt;🛡️ Admin Dashboard&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Distributor Records&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="user-chip"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="user-avatar" style="background:var(--admin-dim);"&gt;🛡️&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="user-name"&gt;Admin User&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Total Distributors&lt;/div&gt;&lt;div class="stat-val" style="color:var(--admin);"&gt;24&lt;/div&gt;&lt;div class="stat-sub"&gt;+3 this month&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Active Customers&lt;/div&gt;&lt;div class="stat-val" style="color:var(--accent);"&gt;1,482&lt;/div&gt;&lt;div class="stat-sub"&gt;Across all branches&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Stock Distributed&lt;/div&gt;&lt;div class="stat-val" style="color:var(--cust);"&gt;94.2%&lt;/div&gt;&lt;div class="stat-sub"&gt;This month&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Pending Complaints&lt;/div&gt;&lt;div class="stat-val" style="color:var(--pub);"&gt;7&lt;/div&gt;&lt;div class="stat-sub"&gt;Needs attention&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="table-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="table-head"&gt;&lt;h3&gt;Distributor Records&lt;/h3&gt;&lt;button class="btn btn-ghost" style="width:auto;padding:8px 16px;font-size:13px;"&gt;+ Add Distributor&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;th&gt;ID&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Branch&lt;/th&gt;&lt;th&gt;Customers&lt;/th&gt;&lt;th&gt;Stock Status&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;D001&lt;/td&gt;&lt;td&gt;Ramesh Kumar&lt;/td&gt;&lt;td&gt;Koramangala&lt;/td&gt;&lt;td&gt;86&lt;/td&gt;&lt;td&gt;Fully Stocked&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Active&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;D002&lt;/td&gt;&lt;td&gt;Suresh Naik&lt;/td&gt;&lt;td&gt;Indiranagar&lt;/td&gt;&lt;td&gt;124&lt;/td&gt;&lt;td&gt;Low Stock&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-yellow"&gt;Warning&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;D003&lt;/td&gt;&lt;td&gt;Priya Menon&lt;/td&gt;&lt;td&gt;Jayanagar&lt;/td&gt;&lt;td&gt;98&lt;/td&gt;&lt;td&gt;Fully Stocked&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Active&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;D004&lt;/td&gt;&lt;td&gt;Mohan Rao&lt;/td&gt;&lt;td&gt;Whitefield&lt;/td&gt;&lt;td&gt;67&lt;/td&gt;&lt;td&gt;Out of Stock&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-red"&gt;Inactive&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-ghost" onclick="goHome()" style="max-width:200px;"&gt;🔓 Logout&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: DISTRIBUTOR LOGIN<span class="Apple-converted-space">                    </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-dist-login"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--dist-dim);border-color:rgba(37,99,235,0.4);color:var(--dist);"&gt;📦 Distributor Portal&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Distributor Login&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto"&gt;Manage your ration collection records&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stepper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num active" style="border-color:var(--dist);color:var(--dist);"&gt;1&lt;/div&gt;&lt;div class="step-label active"&gt;Login&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;2&lt;/div&gt;&lt;div class="step-label"&gt;OTP&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;3&lt;/div&gt;&lt;div class="step-label"&gt;Ration&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;4&lt;/div&gt;&lt;div class="step-label"&gt;Dashboard&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Distributor ID&lt;/label&gt;&lt;input type="text" placeholder="e.g. D001" id="distId"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Password&lt;/label&gt;&lt;input type="password" placeholder="••••••••"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Registered Phone&lt;/label&gt;&lt;input type="tel" placeholder="+91 98765 43210" id="distPhone"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-dist" onclick="sendOTP('dist')"&gt;Send OTP →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: DISTRIBUTOR OTP<span class="Apple-converted-space">                      </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-dist-otp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--dist-dim);border-color:rgba(37,99,235,0.4);color:var(--dist);"&gt;📱 OTP Verification&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Verify Your Phone&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto"&gt;Demo OTP: 123456&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stepper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num done"&gt;✓&lt;/div&gt;&lt;div class="step-label"&gt;Login&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num active" style="border-color:var(--dist);color:var(--dist);"&gt;2&lt;/div&gt;&lt;div class="step-label active"&gt;OTP&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;3&lt;/div&gt;&lt;div class="step-label"&gt;Ration&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;4&lt;/div&gt;&lt;div class="step-label"&gt;Dashboard&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Enter 6-digit OTP&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="otp-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="do1" oninput="otpMove(this,'do2')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="do2" oninput="otpMove(this,'do3')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="do3" oninput="otpMove(this,'do4')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="do4" oninput="otpMove(this,'do5')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="do5" oninput="otpMove(this,'do6')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="do6" oninput="otpMove(this,null)"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="otp-timer"&gt;Demo OTP: &lt;span&gt;1 2 3 4 5 6&lt;/span&gt;&lt;/div&gt;&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-dist" onclick="verifyOTP('dist')"&gt;Verify &amp; Continue →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br/&gt;&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-ghost" onclick="navigate('dist-login')"&gt;← Go Back&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: RATION COLLECTION<span class="Apple-converted-space">                    </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-ration"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--dist-dim);border-color:rgba(37,99,235,0.4);color:var(--dist);"&gt;📦 Ration Collection&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Enter Collection Details&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto"&gt;Record today's ration distribution&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="progress"&gt;&lt;div class="progress-bar" style="width:60%"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Customer ID / Ration Card No.&lt;/label&gt;&lt;input type="text" placeholder="RC-2024-00XXX" id="rcNo"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Collection Date&lt;/label&gt;&lt;input type="date" id="collDate"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Received By (Name)&lt;/label&gt;&lt;input type="text" placeholder="Head of family" id="recvBy"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Item&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;select id="itemType"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Rice (kg)&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Wheat (kg)&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Sugar (kg)&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Kerosene (L)&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Dal (kg)&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Quantity&lt;/label&gt;&lt;input type="number" placeholder="e.g. 5" id="qty"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-dist" onclick="navigate('cust-record')"&gt;Save &amp; View Customer Record →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: CUSTOMER RECORD (DIST) <span class="Apple-converted-space">              </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-cust-record"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--dist-dim);border-color:rgba(37,99,235,0.4);color:var(--dist);"&gt;📋 Customer Record&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Customer Record Saved&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap" style="text-align:center;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="success-icon"&gt;✅&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="form-title"&gt;Record Saved!&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="form-sub"&gt;Collection details have been saved for RC-2024-00123&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style="background:var(--surface);border-radius:12px;padding:16px;text-align:left;margin-bottom:20px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"&gt;&lt;span style="color:var(--muted)"&gt;Customer ID&lt;/span&gt;&lt;span&gt;RC-2024-00123&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"&gt;&lt;span style="color:var(--muted)"&gt;Item&lt;/span&gt;&lt;span&gt;Rice — 5 kg&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"&gt;&lt;span style="color:var(--muted)"&gt;Received By&lt;/span&gt;&lt;span&gt;Ramesh Kumar&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;"&gt;&lt;span style="color:var(--muted)"&gt;Date&lt;/span&gt;&lt;span id="savedDate"&gt;—&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-dist" onclick="navigate('dist-dashboard')"&gt;Go to Dashboard →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: DISTRIBUTOR DASHBOARD<span class="Apple-converted-space">                </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-dist-dashboard"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="dash-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="dash-header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="badge" style="background:var(--dist-dim);border-color:rgba(37,99,235,0.4);color:var(--dist);margin-bottom:8px;"&gt;📦 Distributor Dashboard&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;My Distribution Records&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="user-chip"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="user-avatar" style="background:var(--dist-dim);"&gt;📦&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="user-name"&gt;Ramesh Kumar — D001&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Total Customers&lt;/div&gt;&lt;div class="stat-val" style="color:var(--dist);"&gt;86&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Collected This Month&lt;/div&gt;&lt;div class="stat-val" style="color:var(--accent);"&gt;74&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Stock Remaining&lt;/div&gt;&lt;div class="stat-val" style="color:var(--cust);"&gt;430kg&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="table-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="table-head"&gt;&lt;h3&gt;Recent Collections&lt;/h3&gt;&lt;button class="btn btn-dist" style="width:auto;padding:8px 16px;font-size:13px;" onclick="navigate('ration')"&gt;+ New Entry&lt;/button&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;th&gt;Ration Card&lt;/th&gt;&lt;th&gt;Received By&lt;/th&gt;&lt;th&gt;Items&lt;/th&gt;&lt;th&gt;Date&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;RC-2024-00123&lt;/td&gt;&lt;td&gt;Suresh M&lt;/td&gt;&lt;td&gt;Rice 5kg, Dal 2kg&lt;/td&gt;&lt;td&gt;Today&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Collected&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;RC-2024-00087&lt;/td&gt;&lt;td&gt;Anita K&lt;/td&gt;&lt;td&gt;Wheat 4kg&lt;/td&gt;&lt;td&gt;28 Mar&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Collected&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;RC-2024-00201&lt;/td&gt;&lt;td&gt;—&lt;/td&gt;&lt;td&gt;Rice 5kg, Sugar 1kg&lt;/td&gt;&lt;td&gt;—&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-yellow"&gt;Pending&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-ghost" onclick="goHome()" style="max-width:200px;"&gt;🔓 Logout&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: CUSTOMER LOGIN <span class="Apple-converted-space">                      </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-cust-login"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--cust-dim);border-color:rgba(5,150,105,0.4);color:var(--cust);"&gt;👨‍👩‍👧 Customer Portal&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Customer Login&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto"&gt;View your ration card and family details&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stepper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num active" style="border-color:var(--cust);color:var(--cust);"&gt;1&lt;/div&gt;&lt;div class="step-label active"&gt;Login&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;2&lt;/div&gt;&lt;div class="step-label"&gt;OTP&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;3&lt;/div&gt;&lt;div class="step-label"&gt;Family&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;4&lt;/div&gt;&lt;div class="step-label"&gt;Dashboard&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Ration Card Number&lt;/label&gt;&lt;input type="text" placeholder="RC-2024-XXXXX" id="custRC"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Registered Phone&lt;/label&gt;&lt;input type="tel" placeholder="+91 98765 43210" id="custPhone"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-cust" onclick="sendOTP('cust')"&gt;Send OTP →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: CUSTOMER OTP <span class="Apple-converted-space">                        </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-cust-otp"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--cust-dim);border-color:rgba(5,150,105,0.4);color:var(--cust);"&gt;📱 OTP Verification&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Verify Your Phone&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto"&gt;Demo OTP: 123456&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stepper"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num done"&gt;✓&lt;/div&gt;&lt;div class="step-label"&gt;Login&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num active" style="border-color:var(--cust);color:var(--cust);"&gt;2&lt;/div&gt;&lt;div class="step-label active"&gt;OTP&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;3&lt;/div&gt;&lt;div class="step-label"&gt;Family&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="step"&gt;&lt;div class="step-num"&gt;4&lt;/div&gt;&lt;div class="step-label"&gt;Dashboard&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Enter 6-digit OTP&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="otp-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="co1" oninput="otpMove(this,'co2')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="co2" oninput="otpMove(this,'co3')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="co3" oninput="otpMove(this,'co4')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="co4" oninput="otpMove(this,'co5')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="co5" oninput="otpMove(this,'co6')"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" maxlength="1" class="otp-box" id="co6" oninput="otpMove(this,null)"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="otp-timer"&gt;Demo OTP: &lt;span&gt;1 2 3 4 5 6&lt;/span&gt;&lt;/div&gt;&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-cust" onclick="verifyOTP('cust')"&gt;Verify &amp; Continue →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br/&gt;&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-ghost" onclick="navigate('cust-login')"&gt;← Go Back&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: FAMILY DETAILS <span class="Apple-converted-space">                      </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-family"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--cust-dim);border-color:rgba(5,150,105,0.4);color:var(--cust);"&gt;👨‍👩‍👧 Family Details&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Add Member Details&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto"&gt;Enter details for each family member&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="progress"&gt;&lt;div class="progress-bar" style="width:75%;background:var(--cust);"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Member Full Name&lt;/label&gt;&lt;input type="text" placeholder="e.g. Sunita Devi" id="memName"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Date of Birth&lt;/label&gt;&lt;input type="date" id="memDOB"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Relation to Card Holder&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;select id="memRel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Self (Card Holder)&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Spouse&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Son&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Daughter&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Parent&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Other&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Photo Upload (optional)&lt;/label&gt;&lt;input type="file" accept="image/*" style="padding:8px;"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style="display:flex;gap:12px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn btn-ghost" style="flex:1;"&gt;+ Add Another&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="btn btn-cust" style="flex:2;" onclick="navigate('cust-dashboard')"&gt;Save &amp; Go to Dashboard →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: CUSTOMER DASHBOARD <span class="Apple-converted-space">                  </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-cust-dashboard"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="dash-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="dash-header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="badge" style="background:var(--cust-dim);border-color:rgba(5,150,105,0.4);color:var(--cust);margin-bottom:8px;"&gt;👨‍👩‍👧 Customer Dashboard&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;My Ration Details&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="user-chip"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="user-avatar" style="background:var(--cust-dim);"&gt;👤&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="user-name"&gt;Sunita Devi — RC-2024-00123&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="stat-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Family Members&lt;/div&gt;&lt;div class="stat-val" style="color:var(--cust);"&gt;4&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Monthly Entitlement&lt;/div&gt;&lt;div class="stat-val" style="color:var(--accent);"&gt;20kg&lt;/div&gt;&lt;div class="stat-sub"&gt;Rice + Wheat&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="stat-card"&gt;&lt;div class="stat-label"&gt;Last Collection&lt;/div&gt;&lt;div class="stat-val" style="color:var(--pub);"&gt;28 Mar&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="table-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="table-head"&gt;&lt;h3&gt;Family Members&lt;/h3&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;DOB&lt;/th&gt;&lt;th&gt;Relation&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;Sunita Devi&lt;/td&gt;&lt;td&gt;14/03/1985&lt;/td&gt;&lt;td&gt;Self&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Active&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;Rajesh Kumar&lt;/td&gt;&lt;td&gt;22/07/1983&lt;/td&gt;&lt;td&gt;Spouse&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Active&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;Arjun Kumar&lt;/td&gt;&lt;td&gt;11/01/2010&lt;/td&gt;&lt;td&gt;Son&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Active&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;Priya Kumar&lt;/td&gt;&lt;td&gt;04/09/2014&lt;/td&gt;&lt;td&gt;Daughter&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Active&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="table-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="table-head"&gt;&lt;h3&gt;Collection History&lt;/h3&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;th&gt;Month&lt;/th&gt;&lt;th&gt;Items Collected&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;March 2026&lt;/td&gt;&lt;td&gt;Rice 10kg, Wheat 5kg, Dal 2kg&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Collected&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;February 2026&lt;/td&gt;&lt;td&gt;Rice 10kg, Sugar 1kg&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-green"&gt;Collected&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;tr&gt;&lt;td&gt;January 2026&lt;/td&gt;&lt;td&gt;—&lt;/td&gt;&lt;td&gt;&lt;span class="chip chip-red"&gt;Missed&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-ghost" onclick="goHome()" style="max-width:200px;"&gt;🔓 Logout&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: PUBLIC COMPLAINT <span class="Apple-converted-space">                    </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-pub-complaint"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;margin-bottom:8px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--pub-dim);border-color:rgba(217,119,6,0.4);color:var(--pub);"&gt;📢 Public Grievance&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;File a Complaint&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto"&gt;No login required. Your complaint will be reviewed by the admin.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Full Name&lt;/label&gt;&lt;input type="text" placeholder="Your full name" id="pubName"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Phone Number&lt;/label&gt;&lt;input type="tel" placeholder="+91 98765 43210" id="pubPhone"/&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Branch / Distribution Center&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;select id="pubBranch"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Koramangala Branch&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Indiranagar Branch&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Jayanagar Branch&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Whitefield Branch&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Reason / Complaint Category&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;select id="pubReason"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Short supply of ration&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Quality issue with items&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Distributor misconduct&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Ration card not updated&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Not received ration for months&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;option&gt;Other&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="field"&gt;&lt;label&gt;Description&lt;/label&gt;&lt;textarea id="pubDesc" placeholder="Describe your complaint in detail..."&gt;&lt;/textarea&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-pub" onclick="submitComplaint()"&gt;Submit Complaint →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCREEN: COMPLAINT SUBMITTED<span class="Apple-converted-space">                  </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;div class="screen" id="screen-complaint-done"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="text-align:center;max-width:440px;padding-top:60px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge" style="background:var(--pub-dim);border-color:rgba(217,119,6,0.4);color:var(--pub);"&gt;✅ Submitted&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="success-icon"&gt;📨&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Complaint Submitted!&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="subtitle" style="margin:0 auto 32px"&gt;Your complaint has been registered. You will be contacted within 3–5 working days.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:28px;text-align:left;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"&gt;&lt;span style="color:var(--muted)"&gt;Complaint ID&lt;/span&gt;&lt;span style="color:var(--accent);"&gt;#CMP-2026-0847&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"&gt;&lt;span style="color:var(--muted)"&gt;Status&lt;/span&gt;&lt;span&gt;&lt;span class="chip chip-yellow"&gt;Under Review&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;"&gt;&lt;span style="color:var(--muted)"&gt;Filed On&lt;/span&gt;&lt;span id="complaintDate"&gt;—&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn btn-pub" onclick="goHome()"&gt;← Back to Home&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;!-- SCRIPT <span class="Apple-converted-space">                                      </span>--&gt;</p>
+<p class="p1">&lt;!-- ============================================ --&gt;</p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">let currentScreen = 'home';</p>
+<p class="p1">let timerInterval = null;</p>
+<p class="p2"><br></p>
+<p class="p1">function navigate(screen) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.querySelectorAll('.screen').forEach(s =&gt; s.classList.remove('active'));</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('screen-' + screen).classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>currentScreen = screen;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>document.getElementById('navBack').classList.toggle('visible', screen !== 'home');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.scrollTo(0, 0);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (screen === 'cust-record') {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('savedDate').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (screen === 'complaint-done') {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('complaintDate').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function goHome() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>navigate('home');</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function sendOTP(type) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let phone = '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (type === 'admin') phone = document.getElementById('adminPhone').value || '+91 98765 43210';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (type === 'dist')<span class="Apple-converted-space">  </span>phone = document.getElementById('distPhone').value || '+91 98765 43210';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (type === 'cust')<span class="Apple-converted-space">  </span>phone = document.getElementById('custPhone').value || '+91 98765 43210';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>navigate(type + '-otp');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (type === 'admin') startTimer('adminTimer');</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function verifyOTP(type) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Collect OTP</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let prefix = type === 'admin' ? 'ao' : (type === 'dist' ? 'do' : 'co');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let otp = '';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>for (let i = 1; i &lt;= 6; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let el = document.getElementById(prefix + i);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (el) otp += el.value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (otp.length &lt; 6) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>alert('Please enter all 6 digits. Use demo OTP: 123456');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (otp !== '123456') {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>alert('Incorrect OTP! Use demo OTP: 123456');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (type === 'admin') navigate('admin-dashboard');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (type === 'dist')<span class="Apple-converted-space">  </span>navigate('ration');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (type === 'cust')<span class="Apple-converted-space">  </span>navigate('family');</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function submitComplaint() {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const name = document.getElementById('pubName').value;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (!name.trim()) { alert('Please enter your name'); return; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>navigate('complaint-done');</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function otpMove(current, nextId) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (current.value.length === 1 &amp;&amp; nextId) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const next = document.getElementById(nextId);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (next) next.focus();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">function startTimer(id) {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let seconds = 120;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if (timerInterval) clearInterval(timerInterval);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>timerInterval = setInterval(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const el = document.getElementById(id);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!el) { clearInterval(timerInterval); return; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>seconds--;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const m = Math.floor(seconds / 60);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const s = seconds % 60;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>el.textContent = m + ':' + String(s).padStart(2, '0');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (seconds &lt;= 0) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>clearInterval(timerInterval);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>el.textContent = 'Expired';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}, 1000);</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">// Set today's date in date fields</p>
+<p class="p1">document.addEventListener('DOMContentLoaded', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const today = new Date().toISOString().split('T')[0];</p>
+<p class="p1"><span class="Apple-converted-space">  </span>const dateFields = document.querySelectorAll('input[type="date"]');</p>
+<p class="p1"><span class="Apple-converted-space">  </span>dateFields.forEach(f =&gt; f.value = today);</p>
+<p class="p1">});</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
