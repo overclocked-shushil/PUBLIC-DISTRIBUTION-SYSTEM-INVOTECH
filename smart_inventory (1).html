@@ -171,38 +171,40 @@
 </head>
 <body>
 
-<div id="recaptcha-container"></div>
-
+<!-- NAV -->
 <nav>
   <div class="nav-logo">Smart<span>Ration</span></div>
-  <button class="nav-back" id="navBack" onclick="window.goHome()">← Back to Home</button>
+  <button class="nav-back" id="navBack" onclick="goHome()">← Back to Home</button>
 </nav>
 
+<!-- ============================================ -->
+<!-- SCREEN 0: HOME / LOGIN PAGE                  -->
+<!-- ============================================ -->
 <div class="screen active" id="screen-home">
   <div style="text-align:center;max-width:640px;padding-top:60px;">
     <div class="badge"><span class="badge-dot"></span>College Project — Smart Inventory</div>
     <h1>Smart<em>Ration</em><br/>Management</h1>
     <p class="subtitle">A unified platform for managing ration distribution with OTP-verified access for Admins, Distributors, and Customers.</p>
     <div class="cards-grid">
-      <div class="login-card admin" onclick="window.navigate('admin-login')">
+      <div class="login-card admin" onclick="navigate('admin-login')">
         <div class="card-icon">🛡️</div>
         <div class="card-title">Admin</div>
         <div class="card-desc">Manage distributors, oversee records & system</div>
         <div class="card-arrow">↗</div>
       </div>
-      <div class="login-card dist" onclick="window.navigate('dist-login')">
+      <div class="login-card dist" onclick="navigate('dist-login')">
         <div class="card-icon">📦</div>
         <div class="card-title">Distributor</div>
         <div class="card-desc">Record ration collection & manage customers</div>
         <div class="card-arrow">↗</div>
       </div>
-      <div class="login-card cust" onclick="window.navigate('cust-login')">
+      <div class="login-card cust" onclick="navigate('cust-login')">
         <div class="card-icon">👨‍👩‍👧</div>
         <div class="card-title">Customer</div>
         <div class="card-desc">View family details & ration history</div>
         <div class="card-arrow">↗</div>
       </div>
-      <div class="login-card pub" onclick="window.navigate('pub-complaint')">
+      <div class="login-card pub" onclick="navigate('pub-complaint')">
         <div class="card-icon">📢</div>
         <div class="card-title">Public Complaint</div>
         <div class="card-desc">File a complaint without login</div>
@@ -212,6 +214,9 @@
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: ADMIN LOGIN                          -->
+<!-- ============================================ -->
 <div class="screen" id="screen-admin-login">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--admin-dim);border-color:rgba(192,38,211,0.4);color:var(--admin);">🛡️ Admin Portal</div>
@@ -228,11 +233,14 @@
     </div>
     <div class="field"><label>Admin ID / Email</label><input type="text" placeholder="admin@smartration.gov.in" id="adminId"/></div>
     <div class="field"><label>Password</label><input type="password" placeholder="••••••••" id="adminPass"/></div>
-    <div class="field"><label>Registered Phone Number</label><input type="tel" placeholder="+91 98765 43210" id="adminPhone" pattern="^\+91[0-9]{10}$" required/></div>
-    <button class="btn btn-admin" onclick="window.sendOTP('admin')">Send OTP →</button>
+    <div class="field"><label>Registered Phone Number</label><input type="tel" placeholder="+91 98765 43210" id="adminPhone"/></div>
+    <button class="btn btn-admin" onclick="sendOTP('admin')">Send OTP →</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: ADMIN OTP                            -->
+<!-- ============================================ -->
 <div class="screen" id="screen-admin-otp">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--admin-dim);border-color:rgba(192,38,211,0.4);color:var(--admin);">📱 OTP Verification</div>
@@ -249,22 +257,25 @@
     </div>
     <div class="field"><label>Enter 6-digit OTP</label>
       <div class="otp-row">
-        <input type="text" maxlength="1" class="otp-box" id="ao1" oninput="window.otpMove(this,'ao2')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="ao2" oninput="window.otpMove(this,'ao3')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="ao3" oninput="window.otpMove(this,'ao4')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="ao4" oninput="window.otpMove(this,'ao5')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="ao5" oninput="window.otpMove(this,'ao6')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="ao6" oninput="window.otpMove(this,null)" onkeypress="return /[0-9]/i.test(event.key)"/>
+        <input type="text" maxlength="1" class="otp-box" id="ao1" oninput="otpMove(this,'ao2')"/>
+        <input type="text" maxlength="1" class="otp-box" id="ao2" oninput="otpMove(this,'ao3')"/>
+        <input type="text" maxlength="1" class="otp-box" id="ao3" oninput="otpMove(this,'ao4')"/>
+        <input type="text" maxlength="1" class="otp-box" id="ao4" oninput="otpMove(this,'ao5')"/>
+        <input type="text" maxlength="1" class="otp-box" id="ao5" oninput="otpMove(this,'ao6')"/>
+        <input type="text" maxlength="1" class="otp-box" id="ao6" oninput="otpMove(this,null)"/>
       </div>
     </div>
-    <div class="otp-timer">Expires in <span id="adminTimer">2:00</span></div>
+    <div class="otp-timer">Demo OTP: <span>1 2 3 4 5 6</span> — Expires in <span id="adminTimer">2:00</span></div>
     <br/>
-    <button class="btn btn-admin" onclick="window.verifyOTP('admin')">Verify & Continue →</button>
+    <button class="btn btn-admin" onclick="verifyOTP('admin')">Verify & Continue →</button>
     <br/><br/>
-    <button class="btn btn-ghost" onclick="window.navigate('admin-login')">← Change Number</button>
+    <button class="btn btn-ghost" onclick="navigate('admin-login')">← Change Number</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: ADMIN DASHBOARD                      -->
+<!-- ============================================ -->
 <div class="screen" id="screen-admin-dashboard">
   <div class="dash-wrap">
     <div class="dash-header">
@@ -294,10 +305,13 @@
       </table>
     </div>
     <br/>
-    <button class="btn btn-ghost" onclick="window.goHome()" style="max-width:200px;">🔓 Logout</button>
+    <button class="btn btn-ghost" onclick="goHome()" style="max-width:200px;">🔓 Logout</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: DISTRIBUTOR LOGIN                    -->
+<!-- ============================================ -->
 <div class="screen" id="screen-dist-login">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--dist-dim);border-color:rgba(37,99,235,0.4);color:var(--dist);">📦 Distributor Portal</div>
@@ -316,16 +330,19 @@
     </div>
     <div class="field"><label>Distributor ID</label><input type="text" placeholder="e.g. D001" id="distId"/></div>
     <div class="field"><label>Password</label><input type="password" placeholder="••••••••"/></div>
-    <div class="field"><label>Registered Phone</label><input type="tel" placeholder="+91 98765 43210" id="distPhone" pattern="^\+91[0-9]{10}$" required/></div>
-    <button class="btn btn-dist" onclick="window.sendOTP('dist')">Send OTP →</button>
+    <div class="field"><label>Registered Phone</label><input type="tel" placeholder="+91 98765 43210" id="distPhone"/></div>
+    <button class="btn btn-dist" onclick="sendOTP('dist')">Send OTP →</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: DISTRIBUTOR OTP                      -->
+<!-- ============================================ -->
 <div class="screen" id="screen-dist-otp">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--dist-dim);border-color:rgba(37,99,235,0.4);color:var(--dist);">📱 OTP Verification</div>
     <h2>Verify Your Phone</h2>
-    <p class="subtitle" style="margin:0 auto">OTP sent to your registered number</p>
+    <p class="subtitle" style="margin:0 auto">Demo OTP: 123456</p>
   </div>
   <div class="form-wrap">
     <div class="stepper">
@@ -339,21 +356,24 @@
     </div>
     <div class="field"><label>Enter 6-digit OTP</label>
       <div class="otp-row">
-        <input type="text" maxlength="1" class="otp-box" id="do1" oninput="window.otpMove(this,'do2')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="do2" oninput="window.otpMove(this,'do3')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="do3" oninput="window.otpMove(this,'do4')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="do4" oninput="window.otpMove(this,'do5')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="do5" oninput="window.otpMove(this,'do6')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="do6" oninput="window.otpMove(this,null)" onkeypress="return /[0-9]/i.test(event.key)"/>
+        <input type="text" maxlength="1" class="otp-box" id="do1" oninput="otpMove(this,'do2')"/>
+        <input type="text" maxlength="1" class="otp-box" id="do2" oninput="otpMove(this,'do3')"/>
+        <input type="text" maxlength="1" class="otp-box" id="do3" oninput="otpMove(this,'do4')"/>
+        <input type="text" maxlength="1" class="otp-box" id="do4" oninput="otpMove(this,'do5')"/>
+        <input type="text" maxlength="1" class="otp-box" id="do5" oninput="otpMove(this,'do6')"/>
+        <input type="text" maxlength="1" class="otp-box" id="do6" oninput="otpMove(this,null)"/>
       </div>
     </div>
-    <br/>
-    <button class="btn btn-dist" onclick="window.verifyOTP('dist')">Verify & Continue →</button>
+    <div class="otp-timer">Demo OTP: <span>1 2 3 4 5 6</span></div><br/>
+    <button class="btn btn-dist" onclick="verifyOTP('dist')">Verify & Continue →</button>
     <br/><br/>
-    <button class="btn btn-ghost" onclick="window.navigate('dist-login')">← Go Back</button>
+    <button class="btn btn-ghost" onclick="navigate('dist-login')">← Go Back</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: RATION COLLECTION                    -->
+<!-- ============================================ -->
 <div class="screen" id="screen-ration">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--dist-dim);border-color:rgba(37,99,235,0.4);color:var(--dist);">📦 Ration Collection</div>
@@ -375,10 +395,13 @@
       </select>
     </div>
     <div class="field"><label>Quantity</label><input type="number" placeholder="e.g. 5" id="qty"/></div>
-    <button class="btn btn-dist" onclick="window.navigate('cust-record')">Save & View Customer Record →</button>
+    <button class="btn btn-dist" onclick="navigate('cust-record')">Save & View Customer Record →</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: CUSTOMER RECORD (DIST)               -->
+<!-- ============================================ -->
 <div class="screen" id="screen-cust-record">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--dist-dim);border-color:rgba(37,99,235,0.4);color:var(--dist);">📋 Customer Record</div>
@@ -395,10 +418,13 @@
       <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span style="color:var(--muted)">Received By</span><span>Ramesh Kumar</span></div>
       <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;"><span style="color:var(--muted)">Date</span><span id="savedDate">—</span></div>
     </div>
-    <button class="btn btn-dist" onclick="window.navigate('dist-dashboard')">Go to Dashboard →</button>
+    <button class="btn btn-dist" onclick="navigate('dist-dashboard')">Go to Dashboard →</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: DISTRIBUTOR DASHBOARD                -->
+<!-- ============================================ -->
 <div class="screen" id="screen-dist-dashboard">
   <div class="dash-wrap">
     <div class="dash-header">
@@ -417,7 +443,7 @@
       <div class="stat-card"><div class="stat-label">Stock Remaining</div><div class="stat-val" style="color:var(--cust);">430kg</div></div>
     </div>
     <div class="table-wrap">
-      <div class="table-head"><h3>Recent Collections</h3><button class="btn btn-dist" style="width:auto;padding:8px 16px;font-size:13px;" onclick="window.navigate('ration')">+ New Entry</button></div>
+      <div class="table-head"><h3>Recent Collections</h3><button class="btn btn-dist" style="width:auto;padding:8px 16px;font-size:13px;" onclick="navigate('ration')">+ New Entry</button></div>
       <table>
         <tr><th>Ration Card</th><th>Received By</th><th>Items</th><th>Date</th><th>Status</th></tr>
         <tr><td>RC-2024-00123</td><td>Suresh M</td><td>Rice 5kg, Dal 2kg</td><td>Today</td><td><span class="chip chip-green">Collected</span></td></tr>
@@ -426,10 +452,13 @@
       </table>
     </div>
     <br/>
-    <button class="btn btn-ghost" onclick="window.goHome()" style="max-width:200px;">🔓 Logout</button>
+    <button class="btn btn-ghost" onclick="goHome()" style="max-width:200px;">🔓 Logout</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: CUSTOMER LOGIN                       -->
+<!-- ============================================ -->
 <div class="screen" id="screen-cust-login">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--cust-dim);border-color:rgba(5,150,105,0.4);color:var(--cust);">👨‍👩‍👧 Customer Portal</div>
@@ -447,16 +476,19 @@
       <div class="step"><div class="step-num">4</div><div class="step-label">Dashboard</div></div>
     </div>
     <div class="field"><label>Ration Card Number</label><input type="text" placeholder="RC-2024-XXXXX" id="custRC"/></div>
-    <div class="field"><label>Registered Phone</label><input type="tel" placeholder="+91 98765 43210" id="custPhone" pattern="^\+91[0-9]{10}$" required/></div>
-    <button class="btn btn-cust" onclick="window.sendOTP('cust')">Send OTP →</button>
+    <div class="field"><label>Registered Phone</label><input type="tel" placeholder="+91 98765 43210" id="custPhone"/></div>
+    <button class="btn btn-cust" onclick="sendOTP('cust')">Send OTP →</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: CUSTOMER OTP                         -->
+<!-- ============================================ -->
 <div class="screen" id="screen-cust-otp">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--cust-dim);border-color:rgba(5,150,105,0.4);color:var(--cust);">📱 OTP Verification</div>
     <h2>Verify Your Phone</h2>
-    <p class="subtitle" style="margin:0 auto">OTP sent to your registered number</p>
+    <p class="subtitle" style="margin:0 auto">Demo OTP: 123456</p>
   </div>
   <div class="form-wrap">
     <div class="stepper">
@@ -470,21 +502,24 @@
     </div>
     <div class="field"><label>Enter 6-digit OTP</label>
       <div class="otp-row">
-        <input type="text" maxlength="1" class="otp-box" id="co1" oninput="window.otpMove(this,'co2')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="co2" oninput="window.otpMove(this,'co3')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="co3" oninput="window.otpMove(this,'co4')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="co4" oninput="window.otpMove(this,'co5')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="co5" oninput="window.otpMove(this,'co6')" onkeypress="return /[0-9]/i.test(event.key)"/>
-        <input type="text" maxlength="1" class="otp-box" id="co6" oninput="window.otpMove(this,null)" onkeypress="return /[0-9]/i.test(event.key)"/>
+        <input type="text" maxlength="1" class="otp-box" id="co1" oninput="otpMove(this,'co2')"/>
+        <input type="text" maxlength="1" class="otp-box" id="co2" oninput="otpMove(this,'co3')"/>
+        <input type="text" maxlength="1" class="otp-box" id="co3" oninput="otpMove(this,'co4')"/>
+        <input type="text" maxlength="1" class="otp-box" id="co4" oninput="otpMove(this,'co5')"/>
+        <input type="text" maxlength="1" class="otp-box" id="co5" oninput="otpMove(this,'co6')"/>
+        <input type="text" maxlength="1" class="otp-box" id="co6" oninput="otpMove(this,null)"/>
       </div>
     </div>
-    <br/>
-    <button class="btn btn-cust" onclick="window.verifyOTP('cust')">Verify & Continue →</button>
+    <div class="otp-timer">Demo OTP: <span>1 2 3 4 5 6</span></div><br/>
+    <button class="btn btn-cust" onclick="verifyOTP('cust')">Verify & Continue →</button>
     <br/><br/>
-    <button class="btn btn-ghost" onclick="window.navigate('cust-login')">← Go Back</button>
+    <button class="btn btn-ghost" onclick="navigate('cust-login')">← Go Back</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: FAMILY DETAILS                       -->
+<!-- ============================================ -->
 <div class="screen" id="screen-family">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--cust-dim);border-color:rgba(5,150,105,0.4);color:var(--cust);">👨‍👩‍👧 Family Details</div>
@@ -505,14 +540,17 @@
         <option>Other</option>
       </select>
     </div>
-    <div class="field"><label>Photo Upload (optional)</label><input type="file" accept="image/*" style="padding:8px;"/&gt;</div>
+    <div class="field"><label>Photo Upload (optional)</label><input type="file" accept="image/*" style="padding:8px;"/></div>
     <div style="display:flex;gap:12px;">
       <button class="btn btn-ghost" style="flex:1;">+ Add Another</button>
-      <button class="btn btn-cust" style="flex:2;" onclick="window.navigate('cust-dashboard')">Save & Go to Dashboard →</button>
+      <button class="btn btn-cust" style="flex:2;" onclick="navigate('cust-dashboard')">Save & Go to Dashboard →</button>
     </div>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: CUSTOMER DASHBOARD                   -->
+<!-- ============================================ -->
 <div class="screen" id="screen-cust-dashboard">
   <div class="dash-wrap">
     <div class="dash-header">
@@ -551,10 +589,13 @@
       </table>
     </div>
     <br/>
-    <button class="btn btn-ghost" onclick="window.goHome()" style="max-width:200px;">🔓 Logout</button>
+    <button class="btn btn-ghost" onclick="goHome()" style="max-width:200px;">🔓 Logout</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: PUBLIC COMPLAINT                     -->
+<!-- ============================================ -->
 <div class="screen" id="screen-pub-complaint">
   <div style="text-align:center;margin-bottom:8px;padding-top:60px;">
     <div class="badge" style="background:var(--pub-dim);border-color:rgba(217,119,6,0.4);color:var(--pub);">📢 Public Grievance</div>
@@ -563,7 +604,7 @@
   </div>
   <div class="form-wrap">
     <div class="field"><label>Full Name</label><input type="text" placeholder="Your full name" id="pubName"/></div>
-    <div class="field"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210" id="pubPhone" pattern="^\+91[0-9]{10}$" required/></div>
+    <div class="field"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210" id="pubPhone"/></div>
     <div class="field"><label>Branch / Distribution Center</label>
       <select id="pubBranch">
         <option>Koramangala Branch</option>
@@ -583,10 +624,13 @@
       </select>
     </div>
     <div class="field"><label>Description</label><textarea id="pubDesc" placeholder="Describe your complaint in detail..."></textarea></div>
-    <button class="btn btn-pub" onclick="window.submitComplaint()">Submit Complaint →</button>
+    <button class="btn btn-pub" onclick="submitComplaint()">Submit Complaint →</button>
   </div>
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN: COMPLAINT SUBMITTED                  -->
+<!-- ============================================ -->
 <div class="screen" id="screen-complaint-done">
   <div style="text-align:center;max-width:440px;padding-top:60px;">
     <div class="badge" style="background:var(--pub-dim);border-color:rgba(217,119,6,0.4);color:var(--pub);">✅ Submitted</div>
@@ -598,190 +642,102 @@
       <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;"><span style="color:var(--muted)">Status</span><span><span class="chip chip-yellow">Under Review</span></span></div>
       <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;"><span style="color:var(--muted)">Filed On</span><span id="complaintDate">—</span></div>
     </div>
-    <button class="btn btn-pub" onclick="window.goHome()">← Back to Home</button>
+    <button class="btn btn-pub" onclick="goHome()">← Back to Home</button>
   </div>
 </div>
 
-<script type="module">
-  // 1. Firebase SDK Imports
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+<!-- ============================================ -->
+<!-- SCRIPT                                       -->
+<!-- ============================================ -->
+<script>
+let currentScreen = 'home';
+let timerInterval = null;
 
-  // 2. Apni Firebase Config yahan dalein
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_ID",
-    appId: "YOUR_APP_ID"
-  };
+function navigate(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  currentScreen = screen;
+  document.getElementById('navBack').classList.toggle('visible', screen !== 'home');
+  window.scrollTo(0, 0);
 
-  // 3. Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  let currentScreen = 'home';
-  let timerInterval = null;
-  window.confirmationResult = null;
-
-  // HTML event handlers ko scope provide karne ke liye window me attach kar rahe hain
-  window.navigate = function(screen) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('screen-' + screen).classList.add('active');
-    currentScreen = screen;
-    document.getElementById('navBack').classList.toggle('visible', screen !== 'home');
-    window.scrollTo(0, 0);
-
-    if (screen === 'cust-record') {
-      document.getElementById('savedDate').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
-    }
-    if (screen === 'complaint-done') {
-      document.getElementById('complaintDate').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
-    }
-  };
-
-  window.goHome = function() {
-    window.navigate('home');
-  };
-
-  window.otpMove = function(current, nextId) {
-    if (current.value.length === 1 && nextId) {
-      const next = document.getElementById(nextId);
-      if (next) next.focus();
-    }
-  };
-
-  function setupRecaptcha() {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        'size': 'invisible'
-      });
-    }
+  if (screen === 'cust-record') {
+    document.getElementById('savedDate').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
   }
+  if (screen === 'complaint-done') {
+    document.getElementById('complaintDate').textContent = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+  }
+}
 
-  window.sendOTP = function(type) {
-    let phoneInput = '';
-    if (type === 'admin') phoneInput = document.getElementById('adminPhone').value;
-    if (type === 'dist') phoneInput = document.getElementById('distPhone').value;
-    if (type === 'cust') phoneInput = document.getElementById('custPhone').value;
+function goHome() {
+  navigate('home');
+}
 
-    const phoneRegex = /^\+91[6-9]\d{9}$/;
-    let formattedPhone = phoneInput.trim();
-    if (formattedPhone.length === 10) {
-      formattedPhone = '+91' + formattedPhone;
+function sendOTP(type) {
+  let phone = '';
+  if (type === 'admin') phone = document.getElementById('adminPhone').value || '+91 98765 43210';
+  if (type === 'dist')  phone = document.getElementById('distPhone').value || '+91 98765 43210';
+  if (type === 'cust')  phone = document.getElementById('custPhone').value || '+91 98765 43210';
+  navigate(type + '-otp');
+  if (type === 'admin') startTimer('adminTimer');
+}
+
+function verifyOTP(type) {
+  // Collect OTP
+  let prefix = type === 'admin' ? 'ao' : (type === 'dist' ? 'do' : 'co');
+  let otp = '';
+  for (let i = 1; i <= 6; i++) {
+    let el = document.getElementById(prefix + i);
+    if (el) otp += el.value;
+  }
+  if (otp.length < 6) {
+    alert('Please enter all 6 digits. Use demo OTP: 123456');
+    return;
+  }
+  if (otp !== '123456') {
+    alert('Incorrect OTP! Use demo OTP: 123456');
+    return;
+  }
+  if (type === 'admin') navigate('admin-dashboard');
+  if (type === 'dist')  navigate('ration');
+  if (type === 'cust')  navigate('family');
+}
+
+function submitComplaint() {
+  const name = document.getElementById('pubName').value;
+  if (!name.trim()) { alert('Please enter your name'); return; }
+  navigate('complaint-done');
+}
+
+function otpMove(current, nextId) {
+  if (current.value.length === 1 && nextId) {
+    const next = document.getElementById(nextId);
+    if (next) next.focus();
+  }
+}
+
+function startTimer(id) {
+  let seconds = 120;
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    const el = document.getElementById(id);
+    if (!el) { clearInterval(timerInterval); return; }
+    seconds--;
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    el.textContent = m + ':' + String(s).padStart(2, '0');
+    if (seconds <= 0) {
+      clearInterval(timerInterval);
+      el.textContent = 'Expired';
     }
+  }, 1000);
+}
 
-    if (!phoneRegex.test(formattedPhone)) {
-      alert("Please enter a valid 10-digit Indian phone number (e.g., +919876543210)");
-      return;
-    }
-
-    setupRecaptcha();
-    const appVerifier = window.recaptchaVerifier;
-
-    signInWithPhoneNumber(auth, formattedPhone, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        window.navigate(type + '-otp');
-        if (type === 'admin') window.startTimer('adminTimer');
-      }).catch((error) => {
-        console.error("SMS not sent", error);
-        alert("Failed to send OTP. Please try again.");
-      });
-  };
-
-  window.verifyOTP = function(type) {
-    let prefix = type === 'admin' ? 'ao' : (type === 'dist' ? 'do' : 'co');
-    let otpCode = '';
-    for (let i = 1; i <= 6; i++) {
-      let el = document.getElementById(prefix + i);
-      if (el) otpCode += el.value;
-    }
-
-    if (otpCode.length < 6) {
-      alert('Please enter all 6 digits.');
-      return;
-    }
-
-    if (window.confirmationResult) {
-      window.confirmationResult.confirm(otpCode).then((result) => {
-        const user = result.user;
-        console.log("Logged in user:", user.phoneNumber);
-        
-        if (type === 'admin') window.navigate('admin-dashboard');
-        if (type === 'dist') window.navigate('ration');
-        if (type === 'cust') window.navigate('family');
-      }).catch((error) => {
-        console.error("OTP verification failed", error);
-        alert("Incorrect OTP. Please check and try again.");
-      });
-    } else {
-      alert("Session expired. Please go back and request OTP again.");
-    }
-  };
-
-  window.submitComplaint = async function() {
-    const name = document.getElementById('pubName').value;
-    const phone = document.getElementById('pubPhone').value;
-    const branch = document.getElementById('pubBranch').value;
-    const reason = document.getElementById('pubReason').value;
-    const desc = document.getElementById('pubDesc').value;
-
-    if (!name.trim() || !phone.trim() || !desc.trim()) { 
-      alert('Please fill all mandatory fields (Name, Phone, Description).'); 
-      return; 
-    }
-
-    const phoneRegex = /^\+91[6-9]\d{9}$/;
-    let formattedPhone = phone.trim();
-    if (formattedPhone.length === 10) formattedPhone = '+91' + formattedPhone;
-    if (!phoneRegex.test(formattedPhone)) {
-      alert("Please enter a valid phone number for the complaint.");
-      return;
-    }
-
-    try {
-      const docRef = await addDoc(collection(db, "complaints"), {
-        fullName: name,
-        phoneNumber: formattedPhone,
-        branch: branch,
-        reason: reason,
-        description: desc,
-        timestamp: new Date()
-      });
-      console.log("Complaint saved with ID: ", docRef.id);
-      window.navigate('complaint-done');
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      alert("Failed to submit complaint. Database error.");
-    }
-  };
-
-  window.startTimer = function(id) {
-    let seconds = 120;
-    if (timerInterval) clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-      const el = document.getElementById(id);
-      if (!el) { clearInterval(timerInterval); return; }
-      seconds--;
-      const m = Math.floor(seconds / 60);
-      const s = seconds % 60;
-      el.textContent = m + ':' + String(s).padStart(2, '0');
-      if (seconds <= 0) {
-        clearInterval(timerInterval);
-        el.textContent = 'Expired';
-      }
-    }, 1000);
-  };
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const today = new Date().toISOString().split('T')[0];
-    const dateFields = document.querySelectorAll('input[type="date"]');
-    dateFields.forEach(f => f.value = today);
-  });
+// Set today's date in date fields
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  const dateFields = document.querySelectorAll('input[type="date"]');
+  dateFields.forEach(f => f.value = today);
+});
 </script>
 </body>
 </html>
